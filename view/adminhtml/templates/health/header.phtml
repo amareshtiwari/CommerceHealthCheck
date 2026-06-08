@@ -1,0 +1,43 @@
+<?php
+/**
+ * @var \Amaresh\CommerceHealthCheck\Block\Adminhtml\Health\Report $block
+ */
+?>
+<div class="commerce-health-check">
+    <?php if (!$block->isModuleEnabled()): ?>
+        <div class="message message-warning warning">
+            <div>
+                <?= $block->escapeHtml(__('Commerce Health Check is disabled.')) ?>
+                <a href="<?= $block->escapeUrl($block->getConfigUrl()) ?>">
+                    <?= $block->escapeHtml(__('Enable it in Configuration')) ?>
+                </a>
+            </div>
+        </div>
+    <?php else: ?>
+        <div class="page-main-actions">
+            <div class="page-actions">
+                <div class="page-actions-buttons">
+                    <button type="button"
+                            class="action-default scalable primary"
+                            onclick="setLocation('<?= $block->escapeUrl($block->getRefreshUrl()) ?>')">
+                        <span><?= $block->escapeHtml(__('Run Health Check')) ?></span>
+                    </button>
+                    <button type="button"
+                            class="action-default scalable"
+                            onclick="setLocation('<?= $block->escapeUrl($block->getConfigUrl()) ?>')">
+                        <span><?= $block->escapeHtml(__('Configuration')) ?></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="admin__page-section">
+            <div class="admin__page-section-title">
+                <span class="title"><?= $block->escapeHtml(__('Health Score: %1%', $block->getHealthScore())) ?></span>
+            </div>
+        </div>
+    <?php endif; ?>
+</div>
+
+<style>
+    .commerce-health-check .admin__page-section { margin: 20px 0; }
+</style>

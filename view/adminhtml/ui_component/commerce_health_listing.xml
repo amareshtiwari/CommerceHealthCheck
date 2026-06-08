@@ -1,0 +1,62 @@
+<?xml version="1.0"?>
+<listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <argument name="data" xsi:type="array">
+        <item name="js_config" xsi:type="array">
+            <item name="provider" xsi:type="string">commerce_health_listing.commerce_health_listing_data_source</item>
+        </item>
+    </argument>
+    <settings>
+        <spinner>commerce_health_columns</spinner>
+        <deps>
+            <dep>commerce_health_listing.commerce_health_listing_data_source</dep>
+        </deps>
+    </settings>
+    <dataSource name="commerce_health_listing_data_source" component="Magento_Ui/js/grid/provider">
+        <settings>
+            <storageConfig>
+                <param name="indexField" xsi:type="string">entity_id</param>
+            </storageConfig>
+            <updateUrl path="mui/index/render"/>
+        </settings>
+        <dataProvider class="Amaresh\CommerceHealthCheck\Ui\DataProvider\Health\ListingDataProvider"
+                      name="commerce_health_listing_data_source">
+            <settings>
+                <requestFieldName>id</requestFieldName>
+                <primaryFieldName>entity_id</primaryFieldName>
+            </settings>
+        </dataProvider>
+    </dataSource>
+    <listingToolbar name="listing_top">
+        <settings>
+            <sticky>true</sticky>
+        </settings>
+        <bookmark name="bookmarks"/>
+        <columnsControls name="columns_controls"/>
+        <filterSearch name="fulltext"/>
+        <paging name="listing_paging"/>
+    </listingToolbar>
+    <columns name="commerce_health_columns">
+        <column name="component">
+            <settings>
+                <filter>text</filter>
+                <label translate="true">Component</label>
+                <sortable>false</sortable>
+            </settings>
+        </column>
+        <column name="status">
+            <settings>
+                <filter>text</filter>
+                <label translate="true">Status</label>
+                <sortable>false</sortable>
+            </settings>
+        </column>
+        <column name="details">
+            <settings>
+                <filter>text</filter>
+                <label translate="true">Details</label>
+                <sortable>false</sortable>
+            </settings>
+        </column>
+    </columns>
+</listing>

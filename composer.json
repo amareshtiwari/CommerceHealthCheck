@@ -1,0 +1,34 @@
+{
+    "name": "amareshtiwari/commerce-health-check",
+    "description": "Magento 2 CLI health check suite for database, Redis, OpenSearch, cron, queues, indexers, and disk space",
+    "type": "magento2-module",
+    "version": "1.1.0",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Amaresh Tiwari",
+            "homepage": "https://github.com/amareshtiwari"
+        }
+    ],
+    "support": {
+        "issues": "https://github.com/amareshtiwari/CommerceHealthCheck/issues",
+        "source": "https://github.com/amareshtiwari/CommerceHealthCheck"
+    },
+    "require": {
+        "php": "^8.1|^8.2",
+        "magento/framework": "*",
+        "magento/module-backend": "*",
+        "magento/module-config": "*",
+        "magento/module-cron": "*",
+        "magento/module-email": "*",
+        "magento/module-indexer": "*"
+    },
+    "autoload": {
+        "files": [
+            "registration.php"
+        ],
+        "psr-4": {
+            "Amaresh\\CommerceHealthCheck\\": ""
+        }
+    }
+}
