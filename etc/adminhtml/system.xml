@@ -1,0 +1,153 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <tab id="commerce_health_check" translate="label" sortOrder="920">
+            <label>Commerce Health</label>
+        </tab>
+        <section id="commerce_health_check" translate="label" sortOrder="10"
+                 showInDefault="1" showInWebsite="1" showInStore="1">
+            <label>Commerce Health Check</label>
+            <tab>commerce_health_check</tab>
+            <resource>Amaresh_CommerceHealthCheck::config</resource>
+            <group id="general" translate="label" sortOrder="10"
+                   showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>General</label>
+                <field id="module_enabled" translate="label" type="select" sortOrder="5"
+                       showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Enable Commerce Health Check</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Master switch. When disabled, CLI, admin grid, and alerts are turned off.</comment>
+                </field>
+                <field id="alerts_enabled" translate="label" type="select" sortOrder="10"
+                       showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Enable Scheduled Alerts</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Runs every 15 minutes via Magento cron.</comment>
+                    <depends>
+                        <field id="module_enabled">1</field>
+                    </depends>
+                </field>
+                <field id="alert_checks" translate="label" type="multiselect" sortOrder="20"
+                       showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Alert When These Checks Fail</label>
+                    <source_model>Amaresh\CommerceHealthCheck\Model\Config\Source\AlertChecks</source_model>
+                    <can_be_empty>0</can_be_empty>
+                    <comment>Applies to both email and Slack alerts.</comment>
+                    <depends>
+                        <field id="module_enabled">1</field>
+                        <field id="alerts_enabled">1</field>
+                    </depends>
+                </field>
+            </group>
+            <group id="consumers" translate="label" sortOrder="12"
+                   showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Queue Consumers</label>
+                <field id="required_consumers" translate="label" type="textarea" sortOrder="10"
+                       showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Required Consumers</label>
+                    <comment>Comma-separated consumer names. Example: async.operations.all,inventory.source.items.cleanup</comment>
+                    <depends>
+                        <field id="general/module_enabled">1</field>
+                    </depends>
+                </field>
+            </group>
+            <group id="integrations" translate="label" sortOrder="13"
+                   showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Integrations</label>
+                <field id="endpoints" translate="label" type="textarea" sortOrder="10"
+                       showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Integration Health Endpoints</label>
+                    <comment>One per line: Name|URL. Example: Stripe|https://api.stripe.com/v1/charges</comment>
+                    <depends>
+                        <field id="general/module_enabled">1</field>
+                    </depends>
+                </field>
+            </group>
+            <group id="thresholds" translate="label" sortOrder="15"
+                   showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Check Thresholds</label>
+                <field id="cron_lookback_minutes" translate="label" type="text" sortOrder="10"
+                       showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Cron Lookback (minutes)</label>
+                    <validate>validate-number validate-greater-than-zero</validate>
+                    <comment>Fail cron check if no cron_schedule rows were created within this window. Default: 15</comment>
+                    <depends>
+                        <field id="general/module_enabled">1</field>
+                    </depends>
+                </field>
+                <field id="disk_warning_gb" translate="label" type="text" sortOrder="20"
+                       showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Disk Warning Threshold (GB)</label>
+                    <validate>validate-number validate-greater-than-zero</validate>
+                    <comment>Fail when free disk space is below this value. Default: 10</comment>
+                    <depends>
+                        <field id="general/module_enabled">1</field>
+                    </depends>
+                </field>
+                <field id="disk_critical_gb" translate="label" type="text" sortOrder="30"
+                       showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Disk Critical Threshold (GB)</label>
+                    <validate>validate-number validate-greater-than-zero</validate>
+                    <comment>Fail with critical message when free disk space is below this value. Default: 5</comment>
+                    <depends>
+                        <field id="general/module_enabled">1</field>
+                    </depends>
+                </field>
+            </group>
+            <group id="email" translate="label" sortOrder="20"
+                   showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Email Alerts</label>
+                <field id="enabled" translate="label" type="select" sortOrder="10"
+                       showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Enable Email Alerts</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <depends>
+                        <field id="general/module_enabled">1</field>
+                        <field id="general/alerts_enabled">1</field>
+                    </depends>
+                </field>
+                <field id="recipient" translate="label" type="text" sortOrder="20"
+                       showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Send Alerts To</label>
+                    <validate>validate-email</validate>
+                    <depends>
+                        <field id="general/module_enabled">1</field>
+                        <field id="enabled">1</field>
+                    </depends>
+                </field>
+            </group>
+            <group id="slack" translate="label" sortOrder="30"
+                   showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Slack Alerts</label>
+                <field id="enabled" translate="label" type="select" sortOrder="10"
+                       showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Enable Slack Alerts</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <depends>
+                        <field id="general/module_enabled">1</field>
+                        <field id="general/alerts_enabled">1</field>
+                    </depends>
+                </field>
+                <field id="webhook_url" translate="label" type="obscure" sortOrder="20"
+                       showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Slack Webhook URL</label>
+                    <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                    <depends>
+                        <field id="general/module_enabled">1</field>
+                        <field id="enabled">1</field>
+                    </depends>
+                </field>
+                <field id="channel" translate="label" type="text" sortOrder="30"
+                       showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Slack Channel</label>
+                    <comment>Example: #commerce-alerts</comment>
+                    <depends>
+                        <field id="general/module_enabled">1</field>
+                        <field id="enabled">1</field>
+                    </depends>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

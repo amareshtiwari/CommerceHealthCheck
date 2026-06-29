@@ -1,0 +1,25 @@
+# Secrets — never commit
+.env
+.env.local
+.env.*.local
+*.pem
+*.key
+
+# Dependencies
+node_modules/
+vendor/
+
+# Runtime / local data
+*.log
+
+# OS & editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+agent-transcripts/
+
+# Internal / local only — never publish to GitHub
+AGENTS.md
+docs/agents/
+.cursor/
